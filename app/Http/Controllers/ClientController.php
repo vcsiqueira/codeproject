@@ -2,14 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Client;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
+use App\Repositories\ClientRepository;
 use App\Http\Controllers\Controller;
+use App\Services\ClientService;
+use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
+    /**
+     * @var ClientRepository
+     */
+    private $repository;
+
+    /**
+     * @var ClientService
+     */
+    private $service;
+
+    /**
+     * ClientController constructor.
+     * @param $repository
+     */
+    public function __construct(ClientRepository $repository, ClientService $service)
+    {
+        $this->repository = $repository;
+        $this->service = $service;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +37,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        return \App\Client::all();
+        return $this->repository->all();
     }
 
     /**
@@ -38,7 +58,7 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        return Client::create($request->all());
+        return $this->service->create($request->all());
     }
 
     /**
@@ -49,7 +69,7 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        return Client::find($id);
+        return $this->repository->find($id);
     }
 
     /**
@@ -72,7 +92,7 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return $this->service->update($request->all(), $id);
     }
 
     /**
@@ -83,6 +103,8 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        Client::find($id)->delete();
+        //Caso queira remover algo antes, de deletar o cliente, poderia ser implementado no service... mas como não faremos agora, vamos usar o repository mesmo;
+
+        $this->repository->delete($id);
     }
 }
