@@ -19,6 +19,18 @@ $factory->define(App\Entities\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(App\Entities\Project::class, function (Faker\Generator $faker) {
+    return [
+        'owner_id' => 3,
+        'client_id' => 11,
+        'name' => $faker->name,
+        'description' => $faker->ipv4,
+        'progress' => 100,
+        'status' => 'ATIVO',
+        'due_date' => $faker->date('d/m/Y')
+    ];
+});
 $factory->define(App\Entities\Client::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
