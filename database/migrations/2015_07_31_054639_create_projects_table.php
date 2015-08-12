@@ -22,9 +22,9 @@ class CreateProjectsTable extends Migration
 
 
             $table->string('name');
-            $table->string('description');
-            $table->string('progress');
-            $table->string('status');
+            $table->text('description');
+            $table->smallInteger('progress')->unsigned();
+            $table->smallInteger('status')->unsigned();
             $table->date('due_date');
             $table->timestamps();
 

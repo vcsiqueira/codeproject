@@ -11,6 +11,8 @@
 |
 */
 
+$fact = new \Faker\Factory();
+
 $factory->define(App\Entities\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
@@ -22,12 +24,12 @@ $factory->define(App\Entities\User::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Entities\Project::class, function (Faker\Generator $faker) {
     return [
-        'owner_id' => 3,
-        'client_id' => 11,
+        'owner_id' => rand(1,50),
+        'client_id' => rand(1,10),
         'name' => $faker->name,
         'description' => $faker->ipv4,
         'progress' => 100,
-        'status' => 'ATIVO',
+        'status' => 1,
         'due_date' => $faker->date('d/m/Y')
     ];
 });
@@ -39,5 +41,13 @@ $factory->define(App\Entities\Client::class, function (Faker\Generator $faker) {
         'email' => $faker->email,
         'address' => $faker->address,
         'obs' => $faker->sentence,
+    ];
+});
+
+$factory->define(App\Entities\ProjectNote::class, function (Faker\Generator $faker) {
+    return [
+        'project_id' => rand(1,20),
+        'title' => $faker->word,
+        'note' => $faker->paragraph,
     ];
 });
