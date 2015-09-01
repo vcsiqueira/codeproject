@@ -88,7 +88,7 @@ class ProjectNoteController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id, $noteId)
+    public function update(Request $request, $noteId)
     {
         return $this->service->update($request->all(), $noteId);
     }
@@ -99,7 +99,7 @@ class ProjectNoteController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id, $noteId)
+    public function destroy($noteId)
     {
         //Caso queira remover algo antes, de deletar o cliente, poderia ser implementado no service... mas como não faremos agora, vamos usar o repository mesmo;
 

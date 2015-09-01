@@ -20,6 +20,8 @@ class Verifier
             'password' => $password,
         ];
 
+//        dd($credentials);
+
         if (Auth::once($credentials)) {
             return Auth::user()->id;
         }

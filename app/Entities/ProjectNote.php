@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProjectNote extends Model
 {
     protected $fillable = [
+        'id',
         'project_id',
         'title',
         'note',

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 
 class ProjectController extends Controller
 {
@@ -35,7 +36,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return $this->repository->with(['client','owner'])->all();
+        return $this->repository->with(['client','owner','members'])->findWhere(['owner_id'=> Authorizer::getResourceOwnerId()]);
     }
 
     /**
@@ -67,7 +68,11 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        return $this->repository->find($id);
+        if ($this->checkProjectPermission($id) == false){
+            return ['error'=> 'Access Forbidden'];
+        }
+
+        return $this->repository->with(['client','owner','members'])->find($id);
     }
 
     /**
@@ -105,4 +110,31 @@ class ProjectController extends Controller
 
         $this->repository->delete($id);
     }
+
+    private function checkProjectOwner($projectId){
+
+        $userId = Authorizer::getResourceOwnerId();
+
+        return $this->repository->isOwner($projectId, $userId);
+
+    }
+
+    private function checkProjectMember($projectId){
+
+        $userId = Authorizer::getResourceOwnerId();
+
+        return $this->repository->hasMember($projectId, $userId);
+
+    }
+
+    private function checkProjectPermission($projectId){
+
+        if ($this->checkProjectOwner($projectId) OR $this->checkProjectMember($projectId)){
+            return true;
+        }
+
+        return false;
+    }
+
+
 }

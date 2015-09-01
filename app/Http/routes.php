@@ -11,27 +11,41 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-//INICIO CLIENTS
-    Route::get('client','ClientController@index');
-    Route::post('client','ClientController@store');
-    Route::get('client/{id}','ClientController@show');
-    Route::delete('client/{id}','ClientController@destroy');
-    Route::put('client/{id}','ClientController@update');
-//FIM CLIENTS
+    Route::get('/', function () {
+        return view('app');
+    });
 
-Route::get('project/{id}/note','ProjectNoteController@index');
-Route::post('project/{id}/note','ProjectNoteController@store');
-Route::get('project/{id}/note/{noteId}','ProjectNoteController@show');
-Route::put('project/{id}/note/{noteId}','ProjectNoteController@update');
-Route::delete('project/{id}/note/{noteId}','ProjectNoteController@delete');
+    Route::post('oauth/access_token',function(){
 
-//INICIO PROJECTS
-    Route::get('project','ProjectController@index');
-    Route::post('project','ProjectController@store');
-    Route::get('project/{id}','ProjectController@show');
-    Route::delete('project/{id}','ProjectController@destroy');
-    Route::put('project/{id}','ProjectController@update');
-//FIM PROJECTS
+        return Response::json(\LucaDegasperi\OAuth2Server\Facades\Authorizer::issueAccessToken());
+    });
+
+
+    Route::group(['middleware'=>'oauth'],function(){
+
+        Route::resource('client','ClientController',['except'=>['create','edit']]);
+
+        Route::resource('project','ProjectController', ['except'=>['create','edit']]);
+
+
+        Route::group(['prefix' => 'project'], function(){
+
+
+            Route::get('{id}/note','ProjectNoteController@index');
+            Route::post('{id}/note','ProjectNoteController@store');
+            Route::get('{id}/note/{noteId}','ProjectNoteController@show');
+            Route::put('/note/{noteId}','ProjectNoteController@update');
+            Route::delete('/note/{noteId}','ProjectNoteController@destroy');
+            Route::post('{id}/file','ProjectFileController@store');
+        });
+
+        Route::get('user/authenticated','UserController@authenticated');
+
+    });
+
+
+
+//PROJECT NOTE
+
+//FIM PROJECTNOTE
+

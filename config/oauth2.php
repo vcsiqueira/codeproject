@@ -32,7 +32,21 @@ return [
         'password' => [
             'class' => '\League\OAuth2\Server\Grant\PasswordGrant',
             'callback' => '\App\OAuth\Verifier@verify',
+//            'callback' => function($username, $password){
+//                die($username);
+//                if (Auth::validate(['email'=>$username, 'password'=>$password])){
+//                    $user = \App\Entities\User::where('email',$username)->first();
+//                    return $user->id;
+//                }
+//
+//                return false;
+//            },
             'access_token_ttl' => 3600
+        ],
+        'refresh_token' => [
+            'class' => '\League\OAuth2\Server\Grant\RefreshTokenGrant',
+            'access_token_ttl' => 3600,
+            'refresh_token_ttl' => 36000
         ]
 
     ],
